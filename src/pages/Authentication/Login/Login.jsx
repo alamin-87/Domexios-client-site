@@ -1,14 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import UseAuth from "../../../hooks/UseAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import useAxios from "../../../hooks/useAxios";
 
 const Login = () => {
-  const location = useLocation();
   const axiosInstance = useAxios();
-  const from = location.state?.from || "/";
   const navigate = useNavigate();
   const { signIn } = UseAuth();
   const {
@@ -29,7 +27,7 @@ const Login = () => {
         };
         const userRes = await axiosInstance.post("/users", userInfo);
         console.log(userRes.data);
-        navigate(from);
+        navigate("/");;
       })
       .catch((error) => {
         console.log(error);

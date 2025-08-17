@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import axios from "axios";
 import UseAuth from "../../../hooks/UseAuth";
@@ -10,6 +10,7 @@ const Register = () => {
   const { createUser, updateUserProfile } = UseAuth();
   const [profilePic, setProfilePic] = useState();
   const axiosInstance = useAxios();
+  const navigate = useNavigate(); 
 
   const {
     register,
@@ -21,14 +22,17 @@ const Register = () => {
     createUser(data.email, data.password)
       .then(async (result) => {
         console.log(result.user);
+
+        // Save user in DB
         const userInfo = {
           email: data.email,
           role: "user",
           created_at: new Date().toISOString(),
           last_log_in: new Date().toISOString(),
         };
-        const userRes = await axiosInstance.post("/users", userInfo);
-        console.log(userRes.data);
+        await axiosInstance.post("/users", userInfo);
+
+        // Update profile
         const userProfile = {
           displayName: data.name,
           photoURL: profilePic,
@@ -36,6 +40,7 @@ const Register = () => {
         updateUserProfile(userProfile)
           .then(() => {
             console.log("Profile updated");
+            navigate("/login");
           })
           .catch((err) => console.log(err));
       })
@@ -46,10 +51,12 @@ const Register = () => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append("image", file);
+
     const res = await axios.post(
       `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMG_UPLOAD}`,
       formData
     );
+
     setProfilePic(res.data.data.url);
   };
 
