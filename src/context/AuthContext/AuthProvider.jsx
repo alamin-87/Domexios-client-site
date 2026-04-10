@@ -35,8 +35,13 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        const token = await currentUser.getIdToken();
+        setUser({ ...currentUser, accessToken: token });
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
     return () => {

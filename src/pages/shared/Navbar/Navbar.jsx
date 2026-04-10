@@ -5,12 +5,14 @@ import {
   FaSignInAlt,
   FaTachometerAlt,
   FaSignOutAlt,
+  FaUserCircle,
 } from "react-icons/fa";
 import UseAuth from "../../../hooks/UseAuth";
 import DomexiosLogo from "../domexisLogo/DomexiosLogo";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
-  const { user, logOut } = UseAuth(); // { user, logout }
+  const { user, logOut } = UseAuth();
 
   const navLinks = (
     <>
@@ -18,114 +20,122 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            isActive ? "text-primary font-bold" : ""
+            `flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+              isActive 
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-200" 
+                : "text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+            }`
           }
         >
-          <FaHome className="inline-block mr-1" /> Home
+          <FaHome className="text-lg" /> <span>Home</span>
         </NavLink>
       </li>
       <li>
         <NavLink
           to="/apartmentList"
           className={({ isActive }) =>
-            isActive ? "text-primary font-bold" : ""
+            `flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+              isActive 
+                ? "bg-blue-600 text-white shadow-lg shadow-blue-200" 
+                : "text-slate-600 hover:bg-blue-50 hover:text-blue-600"
+            }`
           }
         >
-          <FaBuilding className="inline-block mr-1" /> Apartment
+          <FaBuilding className="text-lg" /> <span>Apartments</span>
         </NavLink>
       </li>
     </>
   );
-   const handelLogOut = () => {
+
+  const handelLogOut = () => {
     logOut()
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then(() => console.log("Logged out"))
+      .catch((error) => console.error(error));
   };
 
   return (
-    <div className="navbar bg-base-100 shadow-md sticky top-0 z-50">
-      {/* Left: Logo + Name */}
-      <div className="navbar-start">
-        <DomexiosLogo></DomexiosLogo>
-      </div>
+    <nav className="sticky top-0 z-[100] w-full px-4 py-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl rounded-[2rem] px-6 py-2">
+        {/* Left: Logo */}
+        <div className="flex-1 lg:flex-none">
+          <DomexiosLogo />
+        </div>
 
-      {/* Center: Navigation Links */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{navLinks}</ul>
-      </div>
-
-      {/* Mobile Dropdown Menu Button */}
-      <div className="navbar-center lg:hidden">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-          >
+        {/* Center: Desktop Links */}
+        <div className="hidden lg:flex flex-1 justify-center">
+          <ul className="flex items-center gap-2 font-medium">
             {navLinks}
           </ul>
         </div>
-      </div>
 
-      {/* Right: Login or Profile */}
-      <div className="navbar-end">
-        {!user ? (
-          <Link to="/login" className="btn btn-ghost text-xl" title="Login">
-            <FaSignInAlt />
-          </Link>
-        ) : (
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
+        {/* Right: Auth / Mobile Toggle */}
+        <div className="flex items-center gap-2">
+          {/* User Menu */}
+          {!user ? (
+            <Link 
+              to="/login" 
+              className="px-6 py-2.5 bg-slate-900 text-white rounded-full font-bold hover:bg-black transition-all shadow-lg hover:shadow-slate-300 flex items-center gap-2"
             >
-              <div className="w-10 rounded-full">
-                <img src={user.photoURL || "/default-avatar.png"} alt="User" />
-              </div>
+              Sign In <FaSignInAlt className="text-sm" />
+            </Link>
+          ) : (
+            <div className="dropdown dropdown-end">
+              <Motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar border-2 border-blue-100 hover:border-blue-400 p-0.5"
+              >
+                <div className="w-full rounded-full ring ring-offset-2 ring-blue-500/10">
+                  <img src={user.photoURL || "/default-avatar.png"} alt="User" />
+                </div>
+              </Motion.div>
+              <ul
+                tabIndex={0}
+                className="mt-4 p-4 shadow-2xl menu menu-sm dropdown-content bg-white/95 backdrop-blur-xl rounded-[2rem] w-64 border border-slate-100 ring-1 ring-black/5"
+              >
+                <div className="px-4 py-3 border-b border-slate-100 mb-2">
+                  <p className="text-xs font-bold text-blue-600 tracking-widest uppercase mb-1">Authenticated</p>
+                  <p className="font-bold text-slate-900 truncate">{user.displayName}</p>
+                </div>
+                <li>
+                  <NavLink to="/dashboard" className="rounded-xl py-3 flex items-center gap-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50">
+                    <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                      <FaTachometerAlt />
+                    </div>
+                    Dashboard
+                  </NavLink>
+                </li>
+                <li>
+                  <button onClick={handelLogOut} className="rounded-xl py-3 flex items-center gap-3 text-red-600 hover:bg-red-50 mt-1">
+                    <div className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
+                      <FaSignOutAlt />
+                    </div>
+                    Sign Out
+                  </button>
+                </li>
+              </ul>
             </div>
-            <ul
-              tabIndex={0}
-              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-            >
-              <li className="pointer-events-none text-center font-semibold">
-                {user.displayName}
-              </li>
-              <li>
-                <NavLink to="/dashboard">
-                  <FaTachometerAlt /> Dashboard
-                </NavLink>
-              </li>
-              <li>
-                <button onClick={handelLogOut} className="flex items-center gap-2">
-                  <FaSignOutAlt /> Logout
-                </button>
-              </li>
+          )}
+
+          {/* Mobile Menu Toggle */}
+          <div className="dropdown dropdown-end lg:hidden">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            </div>
+            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-4 p-4 shadow-2xl bg-white/95 backdrop-blur-xl rounded-[2rem] w-52 border border-slate-100 ring-1 ring-black/5 gap-2">
+              {navLinks}
             </ul>
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
+
 export default Navbar;
+

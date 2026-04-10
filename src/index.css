@@ -1,2 +1,54 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@layer base {
+  :root {
+    --primary-blue: 221.2 83.2% 53.3%;
+    --premium-dark: 222.2 47.4% 11.2%;
+  }
+
+  body {
+    @apply antialiased text-slate-900 bg-white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-linear-to-r from-blue-600 to-indigo-600;
+  }
+  
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40;
+  }
+
+  .mesh-bg {
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(221, 83%, 53%, 0.05) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(263, 70%, 50%, 0.05) 0, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(221, 83%, 53%, 0.05) 0, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(263, 70%, 50%, 0.05) 0, transparent 50%);
+  }
+
+  .premium-shadow {
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Custom Scrollbar for Luxury Feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

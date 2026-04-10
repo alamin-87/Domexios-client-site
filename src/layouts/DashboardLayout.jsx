@@ -10,11 +10,15 @@ import {
   FaNewspaper,
   FaHandshake,
   FaGift,
+  FaHome,
 } from "react-icons/fa";
+import UseAuth from "../hooks/UseAuth";
 import DomexiosLogo from "../pages/shared/domexisLogo/DomexiosLogo";
 import useUserRole from "../hooks/useUserRole";
+import { motion as Motion } from "framer-motion";
 
 const DashboardLayout = () => {
+  const { user } = UseAuth();
   const { role, isRoleLoading } = useUserRole();
   console.log(role);
 
@@ -101,7 +105,7 @@ const DashboardLayout = () => {
 
   const panelsToShow =
     role === "admin"
-      ? ["user", "member", "admin"]
+      ? ["admin"]
       : role === "member"
       ? ["member"]
       : role === "user"
@@ -145,37 +149,83 @@ const DashboardLayout = () => {
       </div>
 
       {/* Sidebar */}
-      <div className="drawer-side">
+      <div className="drawer-side z-[101]">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-        <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content space-y-2">
-          <DomexiosLogo />
+        <div className="w-80 min-h-full bg-white border-r border-slate-100 flex flex-col">
+          {/* Sidebar Header */}
+          <div className="p-8 border-b border-slate-50">
+            <DomexiosLogo />
+          </div>
 
-          {panelsToShow.map((panelKey) => {
-            const panel = panels[panelKey];
-            return (
-              <React.Fragment key={panelKey}>
-                <li className="text-gray-500 uppercase text-xs font-bold mt-6">
-                  {panel.label}
-                </li>
-                {panel.links.map(({ to, icon, text }) => (
-                  <li key={to}>
-                    <NavLink
-                      to={to}
-                      className={({ isActive }) =>
-                        isActive
-                          ? "text-white bg-blue-600 px-4 py-2 rounded-md font-medium"
-                          : "text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md font-medium"
-                      }
-                    >
-                      {icon}
-                      {text}
-                    </NavLink>
+          {/* Identity Section */}
+          <div className="p-8">
+            <div className="bg-slate-50 rounded-[2rem] p-6 border border-slate-100 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/5 blur-2xl -mr-10 -mt-10"></div>
+              
+              <div className="flex flex-col items-center text-center relative z-10">
+                <div className="w-20 h-20 rounded-[1.5rem] border-4 border-white shadow-xl overflow-hidden mb-4">
+                  <img src={user?.photoURL || "/default-avatar.png"} alt="User" className="w-full h-full object-cover" />
+                </div>
+                
+                <h3 className="font-black text-slate-900 leading-tight">{user?.displayName}</h3>
+                <p className="text-[10px] text-slate-400 font-bold truncate w-full mt-1 mb-4">{user?.email}</p>
+                
+                {/* Role Badge */}
+                <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.15em] shadow-sm ${
+                  role === "admin" ? "bg-slate-900 text-white" :
+                  role === "member" ? "bg-emerald-500 text-white" :
+                  "bg-blue-100 text-blue-600"
+                }`}>
+                  {role === "admin" ? "Tower Administrator" : 
+                   role === "member" ? "Elite Resident" : 
+                   "Registered User"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Links */}
+          <ul className="menu px-6 space-y-2 flex-grow">
+            {panelsToShow.map((panelKey) => {
+              const panel = panels[panelKey];
+              return (
+                <React.Fragment key={panelKey}>
+                  <li className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mt-8 mb-2 ml-4">
+                    {panel.label}
                   </li>
-                ))}
-              </React.Fragment>
-            );
-          })}
-        </ul>
+                  {panel.links.map(({ to, icon, text }) => (
+                    <li key={to}>
+                      <NavLink
+                        to={to}
+                        className={({ isActive }) =>
+                          `flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 font-bold ${
+                            isActive
+                              ? "bg-slate-900 text-white shadow-2xl shadow-slate-200 translate-x-1"
+                              : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                          }`
+                        }
+                      >
+                        <span className="text-lg">{icon}</span>
+                        <span className="text-sm">{text}</span>
+                      </NavLink>
+                    </li>
+                  ))}
+                </React.Fragment>
+              );
+            })}
+          </ul>
+
+          {/* Sidebar Footer */}
+          <div className="p-8 border-t border-slate-50">
+            <NavLink
+              to="/"
+              className="flex items-center justify-center gap-3 w-full py-4 bg-blue-50 text-blue-600 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+            >
+              <FaHome className="text-lg" />
+              Return Home
+            </NavLink>
+          </div>
+        </div>
       </div>
     </div>
   );
