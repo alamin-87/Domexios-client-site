@@ -1,10 +1,12 @@
 import React from "react";
+import { Link } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { motion as Motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 const Banner = () => {
   const slides = [
@@ -39,7 +41,7 @@ const Banner = () => {
           clickable: true,
           dynamicBullets: true,
         }}
-        className="h-[70vh] md:h-[90vh] w-full"
+        className="h-[60vh] lg:h-[70vh] w-full"
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
@@ -58,7 +60,7 @@ const Banner = () => {
 
                 {/* Caption */}
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 z-10 text-white">
-                  <Motion.h2
+                  <Motion.h1
                     initial={{ y: 50, opacity: 0 }}
                     animate={isActive ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -69,7 +71,7 @@ const Banner = () => {
                         {word}{" "}
                       </span>
                     ))}
-                  </Motion.h2>
+                  </Motion.h1>
                   
                   <Motion.p
                     initial={{ y: 30, opacity: 0 }}
@@ -86,13 +88,18 @@ const Banner = () => {
                     transition={{ duration: 0.5, delay: 0.6 }}
                     className="mt-10 flex gap-4"
                   >
-                    <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold transition-all shadow-lg hover:shadow-blue-500/30">
+                    <Link to="/apartmentList" className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold transition-all shadow-lg hover:shadow-blue-500/30">
                       Explore Floors
-                    </button>
-                    <button className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-full font-semibold transition-all backdrop-blur-md">
-                      Contact Us
-                    </button>
+                    </Link>
+                    <Link to="/support" className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-full font-semibold transition-all backdrop-blur-md">
+                      Resident Support
+                    </Link>
                   </Motion.div>
+                </div>
+                
+                {/* Visual Hint for next section */}
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+                    <ChevronDown className="text-white/70" size={32} />
                 </div>
               </div>
             )}

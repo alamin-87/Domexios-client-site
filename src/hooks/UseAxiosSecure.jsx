@@ -1,16 +1,27 @@
 import axios from "axios";
 import { useEffect } from "react";
-import UseAuth from "./UseAuth";
+import useAuth from "./useAuth";
 import { useNavigate } from "react-router";
 
+// Determine the API URL dynamically to avoid build-time environment variable issues
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes("localhost")) {
+    return import.meta.env.VITE_API_URL;
+  }
+  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+    return "http://localhost:5000";
+  }
+  return "https://domexis-server-site.vercel.app";
+};
+
 const axiosSecure = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://domexis-server-site.vercel.app",
+  baseURL: getBaseURL(),
   withCredentials: true,
 });
 
-const UseAxiosSecure = () => {
-  const { user, logOut } = UseAuth();
-  const naviGate = useNavigate();
+const useAxiosSecure = () => {
+  const { user, logOut } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Request Interceptor
@@ -22,7 +33,7 @@ const UseAxiosSecure = () => {
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     // Response Interceptor
@@ -33,20 +44,20 @@ const UseAxiosSecure = () => {
       (error) => {
         if (error.response && [401, 403].includes(error.response.status)) {
           logOut().then(() => {
-            naviGate("/login");
+            navigate("/login");
           });
         }
         return Promise.reject(error);
-      }
+      },
     );
 
     return () => {
       axiosSecure.interceptors.request.eject(requestInterceptor);
       axiosSecure.interceptors.response.eject(responseInterceptor);
     };
-  }, [user, logOut, naviGate]);
+  }, [user, logOut, navigate]);
 
   return axiosSecure;
 };
 
-export default UseAxiosSecure;
+export default useAxiosSecure;

@@ -1,10 +1,10 @@
 import React from "react";
-import UseAuth from "../hooks/UseAuth";
+import useAuth from "../hooks/useAuth";
 import useUserRole from "../hooks/useUserRole";
 import { Navigate } from "react-router";
 
 const AdminRoute = ({ children }) => {
-  const { user, loading } = UseAuth();
+  const { user, loading } = useAuth();
   const { role, isRoleLoading } = useUserRole();
   if (loading || isRoleLoading) {
     return <span className="loading loading-dots loading-xl"></span>;

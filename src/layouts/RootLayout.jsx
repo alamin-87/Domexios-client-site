@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet } from 'react-router';
 import Navbar from '../pages/shared/Navbar/Navbar';
 import Footer from '../pages/shared/Footer/Footer';
+import AIChatbot from '../components/AIChatbot/AIChatbot';
 import Lenis from 'lenis';
 
 const RootLayout = () => {
@@ -27,6 +28,7 @@ const RootLayout = () => {
                 <Outlet />
             </main>
             <Footer />
+            <AIChatbot />
         </div>
     );
 };

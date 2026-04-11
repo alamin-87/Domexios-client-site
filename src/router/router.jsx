@@ -16,8 +16,25 @@ import MakeAnnouncement from "../pages/DashBoard/MakeAnnouncement/MakeAnnounceme
 import AgreementRequests from "../pages/DashBoard/AgreementRequests/AgreementRequests";
 import ManageCoupons from "../pages/DashBoard/ManageCoupons/ManageCoupons";
 import Announcements from "../pages/DashBoard/Announcements/Announcements";
+import RequestedApartments from "../pages/DashBoard/RequestedApartments/RequestedApartments";
 import Forbiden from "../pages/forbiden/Forbiden";
 import AdminRoute from "../routes/AdminRoute";
+import About from "../pages/Public/About";
+import Amenities from "../pages/Public/Amenities";
+import Gallery from "../pages/Public/Gallery";
+import Support from "../pages/Public/Support";
+import DashboardHome from "../pages/DashBoard/DashboardHome/DashboardHome";
+import ApartmentDetails from "../pages/apartment/ApartmentDetails";
+import Contact from "../pages/Public/Contact";
+import Privacy from "../pages/Public/Privacy";
+import Blog from "../pages/Public/Blog";
+import Terms from "../pages/Public/Terms";
+import ResidencyRules from "../pages/Public/ResidencyRules";
+import Cookies from "../pages/Public/Cookies";
+import RentEstimator from "../pages/Public/RentEstimator";
+import PropertyMatcher from "../pages/Public/PropertyMatcher";
+import MaintenancePredictor from "../pages/Public/MaintenancePredictor";
+import SecurityScan from "../pages/Public/SecurityScan";
 
 export const router = createBrowserRouter([
   {
@@ -33,8 +50,68 @@ export const router = createBrowserRouter([
         Component: ApartmentList,
       },
       {
+        path: "apartment/:id",
+        Component: ApartmentDetails,
+      },
+      {
+        path: "about",
+        Component: About,
+      },
+      {
+        path: "amenities",
+        Component: Amenities,
+      },
+      {
+        path: "gallery",
+        Component: Gallery,
+      },
+      {
+        path: "support",
+        Component: Support,
+      },
+      {
+        path: "contact",
+        Component: Contact,
+      },
+      {
+        path: "privacy",
+        Component: Privacy,
+      },
+      {
+        path: "blog",
+        Component: Blog,
+      },
+      {
+        path: "terms",
+        Component: Terms,
+      },
+      {
+        path: "rules",
+        Component: ResidencyRules,
+      },
+      {
+        path: "cookies",
+        Component: Cookies,
+      },
+      {
         path: "forbiden",
         Component: Forbiden,
+      },
+      {
+        path: "rent-estimator",
+        Component: RentEstimator,
+      },
+      {
+        path: "property-matcher",
+        Component: PropertyMatcher,
+      },
+      {
+        path: "maintenance-predictor",
+        Component: MaintenancePredictor,
+      },
+      {
+        path: "security-scan",
+        Component: SecurityScan,
       },
     ],
   },
@@ -61,8 +138,16 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        Component: DashboardHome,
+      },
+      {
         path: "profile",
         Component: MyProfile,
+      },
+      {
+        path: "my-requests",
+        Component: RequestedApartments,
       },
       {
         path: "make-payment",

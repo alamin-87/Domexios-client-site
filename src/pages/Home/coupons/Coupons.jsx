@@ -3,11 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../../hooks/useAxios";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { FaTicketAlt, FaClock, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import Skeleton from "../../../components/common/Skeleton";
 
 const Coupons = () => {
   const axiosInstance = useAxios();
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 3;
+  const limit = 4;
 
   const {
     data: { coupons = [], total = 0 } = {},
@@ -41,8 +42,16 @@ const Coupons = () => {
   };
 
   if (isLoading) return (
-    <div className="py-24 flex justify-center">
-      <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <div className="py-24 max-w-7xl mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="p-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] h-64">
+            <Skeleton className="h-8 w-1/2 mb-4" />
+            <Skeleton className="h-4 w-3/4 mb-8" />
+            <Skeleton className="h-16 w-full rounded-2xl" />
+          </div>
+        ))}
+      </div>
     </div>
   );
   
@@ -75,7 +84,7 @@ const Coupons = () => {
             initial="hidden"
             animate="visible"
             exit={{ opacity: 0, x: -20 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
           >
             {coupons.length > 0 ? (
               coupons.map((coupon) => (
@@ -83,7 +92,7 @@ const Coupons = () => {
                   key={coupon._id}
                   variants={cardVariants}
                   whileHover={{ scale: 1.02, rotate: 1 }}
-                  className="relative p-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] overflow-hidden group hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-300"
+                  className="relative p-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] overflow-hidden group hover:border-blue-300 hover:bg-blue-50/30 transition-all duration-300 flex flex-col h-full"
                 >
                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-600/5 rounded-full blur-2xl group-hover:bg-blue-600/10"></div>
                   
@@ -99,11 +108,11 @@ const Coupons = () => {
                     </div>
                   </div>
 
-                  <p className="text-slate-600 text-left mb-8 line-clamp-2">
+                  <p className="text-slate-600 text-left mb-8 line-clamp-3 flex-1">
                     {coupon.description}
                   </p>
 
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 mt-auto">
                     <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 shadow-sm border-dashed">
                       <span className="text-xs uppercase font-bold text-slate-400 tracking-widest">CODE</span>
                       <span className="font-mono font-bold text-blue-600 tracking-widest text-lg">

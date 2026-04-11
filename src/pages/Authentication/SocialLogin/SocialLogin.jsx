@@ -1,15 +1,16 @@
 import { useLocation, useNavigate } from "react-router";
-import UseAuth from "../../../hooks/UseAuth";
+import useAuth from "../../../hooks/useAuth";
 import useAxios from "../../../hooks/useAxios";
+import toast from "react-hot-toast";
 
 const SocialLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || "/dashboard";
   const axiosInstance = useAxios();
-  const { signInWithGoogle } = UseAuth();
+  const { signInWithGoogle } = useAuth();
 
-  const handelGoogleSignIn = () => {
+  const handleGoogleSignIn = () => {
     signInWithGoogle()
       .then(async (result) => {
         const user = result.user;
@@ -19,19 +20,20 @@ const SocialLogin = () => {
           created_at: new Date().toISOString(),
           last_log_in: new Date().toISOString(),
         };
-        const userRes = await axiosInstance.post("/users", userInfo);
-        console.log("User saved:", userRes.data);
+        await axiosInstance.post("/users", userInfo);
+        toast.success("Welcome to Domexis!");
         navigate(from, { replace: true });
       })
       .catch((error) => {
         console.error("Google sign-in error:", error);
+        toast.error(`Login failed: ${error.message}`);
       });
   };
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <button
-        onClick={handelGoogleSignIn}
+        onClick={handleGoogleSignIn}
         className="w-full py-4 px-6 bg-white border border-slate-100 rounded-2xl flex items-center justify-center gap-4 text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-slate-50 hover:shadow-lg transition-all duration-300"
       >
         <svg

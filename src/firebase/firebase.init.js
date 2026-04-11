@@ -17,3 +17,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+// Simple log to verify env variables are loaded (non-sensitive check)
+if (import.meta.env.MODE === 'development') {
+    console.log("Firebase initialized for project:", firebaseConfig.projectId);
+}

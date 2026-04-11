@@ -13,11 +13,13 @@ export default defineConfig({
             if (id.includes('three')) return 'vendor-three';
             if (id.includes('firebase')) return 'vendor-firebase';
             if (id.includes('framer-motion')) return 'vendor-framer';
+            if (id.includes('react-icons')) return 'vendor-icons';
+            if (id.includes('@tanstack')) return 'vendor-tanstack';
             return 'vendor';
           }
         }
       }
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1600,
   }
 })
